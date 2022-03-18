@@ -1,7 +1,7 @@
-project(MODULE_NAME_sandbox LANGUAGES ${RYTHE_LANGUAGE})
+project(application_sandbox LANGUAGES ${RYTHE_LANGUAGE})
 
 rythe_find_sources(sources "${PROJECT_SOURCE_DIR}")
-add_executable(MODULE_NAME_sandbox ${sources})
-set_target_properties(MODULE_NAME_sandbox PROPERTIES FOLDER applications)
+add_executable(application_sandbox ${sources})
+set_target_properties(application_sandbox PROPERTIES FOLDER applications)
 
-rythe_configure_engine_application(MODULE_NAME_sandbox)
+rythe_configure_engine_application(application_sandbox)
