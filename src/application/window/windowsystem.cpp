@@ -1,5 +1,4 @@
 #include <application/window/windowsystem.hpp>
-#include <rendering/debugrendering.hpp>
 
 namespace legion::application
 {
@@ -270,7 +269,7 @@ namespace legion::application
         using namespace filesystem::literals;
 
         m_exit = false;
-        m_defaultIcon = assets::load<image>("Legion Icon", "engine://resources/legion/icon"_view, assets::import_settings<image>{ true, true, false });
+        m_defaultIcon = assets::load<image>("Legion Icon", "engine://resources/rythe/icon"_view, assets::import_settings<image>{ true, true, false });
 
         bindToEvent<events::exit, &WindowSystem::onExit>();
 
@@ -293,7 +292,6 @@ namespace legion::application
 
     void WindowSystem::createWindows()
     {
-        OPTICK_EVENT();
         if (m_exit) // If the engine is exiting then we can't create new windows.
             return;
 
@@ -425,7 +423,6 @@ namespace legion::application
 
     void WindowSystem::fullscreenWindows()
     {
-        OPTICK_EVENT();
         if (m_exit) // If the engine is exiting then we can't change any windows.
             return;
 
@@ -478,7 +475,6 @@ namespace legion::application
 
     void WindowSystem::updateWindowIcons()
     {
-        OPTICK_EVENT();
         if (m_exit) // If the engine is exiting then we can't change any windows.
             return;
 
@@ -515,7 +511,6 @@ namespace legion::application
 
     void WindowSystem::refreshWindows(time::time_span<fast_time> deltaTime)
     {
-        OPTICK_EVENT();
         if (!ContextHelper::initialized())
             return;
 
@@ -535,7 +530,6 @@ namespace legion::application
 
     void WindowSystem::handleWindowEvents(time::time_span<fast_time> deltaTime)
     {
-        OPTICK_EVENT();
         createWindows();
         updateWindowIcons();
         fullscreenWindows();
