@@ -10,7 +10,7 @@
  * @file contexthelper.hpp
  */
 
-namespace legion::application
+namespace rythe::application
 {
     using gl_id = GLuint;
     using gl_location = GLint;
@@ -24,7 +24,7 @@ namespace legion::application
     private:
         static std::atomic_bool m_initialized;
         static async::rw_spinlock m_initCallbackLock;
-        static multicast_delegate<void()> m_onInit;
+        static rsl::multicast_delegate<void()> m_onInit;
 
         static atomic_sparse_map<GLFWwindow*, bool> m_windowInitialized;
 
@@ -44,7 +44,7 @@ namespace legion::application
          */
         static bool addOnInitCallback(delegate<void()> callback);
         static void terminate();
-        static int getError(cstring* desc);
+        static int getError(rsl::cstring* desc);
         static GLFWmonitor* getPrimaryMonitor();
         static GLFWmonitor* getCurrentMonitor(GLFWwindow* window);
         static void setWindowMonitor(GLFWwindow* window, GLFWmonitor* monitor, math::ivec2 pos, math::ivec2 size, int refreshRate);
@@ -59,7 +59,7 @@ namespace legion::application
         /**@brief Gives focus to the window that has requested it. (may only be called from the input thread)
          */
         static void updateWindowFocus();
-        static GLFWglproc getProcAddress(cstring procname);
+        static GLFWglproc getProcAddress(rsl::cstring procname);
         static void setWindowShouldClose(GLFWwindow* window, int value);
         static int windowShouldClose(GLFWwindow* window);
         static void setWindowIcon(GLFWwindow* window, int count, const GLFWimage* images);

@@ -1,6 +1,6 @@
 #include <application/window/windowsystem.hpp>
 
-namespace legion::application
+namespace rythe::application
 {
     sparse_map<GLFWwindow*, ecs::component<window>> WindowSystem::m_windowComponents;
     async::spinlock WindowSystem::m_creationLock;
@@ -269,12 +269,12 @@ namespace legion::application
         using namespace filesystem::literals;
 
         m_exit = false;
-        m_defaultIcon = assets::load<image>("Legion Icon", "engine://resources/rythe/icon"_view, assets::import_settings<image>{ true, true, false });
+        m_defaultIcon = assets::load<image>("RYTHE Icon", "engine://resources/rythe/icon"_view, assets::import_settings<image>{ true, true, false });
 
         bindToEvent<events::exit, &WindowSystem::onExit>();
 
         if (m_creationRequests.empty() || (std::find_if(m_creationRequests.begin(), m_creationRequests.end(), [](window_request& r) { return r.entityId == ecs::world_entity_id; }) == m_creationRequests.end()))
-            requestWindow(ecs::world, math::ivec2(1360, 768), "LEGION Engine", assets::invalid_asset<image>, nullptr, nullptr, 1); // Create the request for the main window.
+            requestWindow(ecs::world, math::ivec2(1360, 768), "RYTHE Engine", assets::invalid_asset<image>, nullptr, nullptr, 1); // Create the request for the main window.
 
         if (!ContextHelper::initialized()) // Initialize context.
             if (!ContextHelper::init())
@@ -335,7 +335,7 @@ namespace legion::application
                 request.size = { 400, 400 };
 
             if (request.name.empty())
-                request.name = "LEGION Engine";
+                request.name = "RYTHE Engine";
 
             assets::asset<image> icon = request.icon;
             if (icon == assets::invalid_asset<image>)

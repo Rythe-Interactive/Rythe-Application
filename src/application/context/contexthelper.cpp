@@ -1,12 +1,12 @@
 #include <application/context/contexthelper.hpp>
 
-namespace legion::application
+namespace rythe::application
 {
     std::atomic_bool ContextHelper::m_initialized;
     atomic_sparse_map<GLFWwindow*, bool> ContextHelper::m_windowInitialized;
 
     async::rw_spinlock ContextHelper::m_initCallbackLock;
-    multicast_delegate<void()> ContextHelper::m_onInit;
+    rsl::multicast_delegate<void()> ContextHelper::m_onInit;
 
     std::atomic<GLFWwindow*> ContextHelper::newFocus;
 
@@ -17,7 +17,7 @@ namespace legion::application
 
     bool ContextHelper::init()
     {
-        glfwSetErrorCallback([](int code, cstring desc)
+        glfwSetErrorCallback([](int code, rsl::cstring desc)
             {
                 log::error("GLFW ERROR {}: {}", code, desc);
             });
@@ -51,7 +51,7 @@ namespace legion::application
         glfwTerminate();
     }
 
-    int ContextHelper::getError(cstring* desc)
+    int ContextHelper::getError(rsl::cstring* desc)
     {
         return glfwGetError(desc);
     }
@@ -146,7 +146,7 @@ namespace legion::application
         glfwFocusWindow(focus);
     }
 
-    GLFWglproc ContextHelper::getProcAddress(cstring procname)
+    GLFWglproc ContextHelper::getProcAddress(rsl::cstring procname)
     {
         return glfwGetProcAddress(procname);
     }

@@ -1,7 +1,7 @@
 #include <application/window/window.hpp>
 #include <application/window/windowsystem.hpp>
 
-namespace legion::application
+namespace rythe::application
 {
     void window::enableCursor(bool enabled) const
     {

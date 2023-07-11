@@ -6,7 +6,7 @@
 #include <application/window/windowsystem.hpp>
 #include <application/module/applicationmodule.hpp>
 
-namespace legion
+namespace rythe
 {
-    namespace app = ::legion::application;
+    namespace app = ::rythe::application;
 }

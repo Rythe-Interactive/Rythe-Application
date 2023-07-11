@@ -1,6 +1,6 @@
 #include <application/input/inputsystem.hpp>
 
-namespace legion::application
+namespace rythe::application
 {
     math::dvec2 InputSystem::m_mousePos;
     math::dvec2 InputSystem::m_mouseDelta;

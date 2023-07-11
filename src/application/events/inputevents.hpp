@@ -3,7 +3,7 @@
 #include <application/input/inputmap.hpp>
 
 
-namespace legion::application
+namespace rythe::application
 {
     template <class T>
     struct input_action : public events::event<T>
@@ -21,8 +21,8 @@ namespace legion::application
         inputmap::modifier_keys mods{};
         inputmap::method identifier{};
 
-        L_NODISCARD bool pressed()  const { return value == true;  }
-        L_NODISCARD bool released() const { return value == false; }
+        R_NODISCARD bool pressed()  const { return value == true;  }
+        R_NODISCARD bool released() const { return value == false; }
     };
 
     template <class T>

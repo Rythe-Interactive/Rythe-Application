@@ -4,7 +4,7 @@
 #include <vector>
 
 
-namespace legion::application
+namespace rythe::application
 {
     struct window_close final : public events::event<window_close>
     {
@@ -106,10 +106,10 @@ namespace legion::application
     struct window_item_dropped final : public events::event<window_item_dropped>
     {
         ecs::component<window> windowHandle;
-        std::vector<cstring> paths;
+        std::vector<rsl::cstring> paths;
 
         window_item_dropped() = default;
-        window_item_dropped(ecs::component<window> windowHandle, int count, cstring* cpaths) : windowHandle(windowHandle)
+        window_item_dropped(ecs::component<window> windowHandle, int count, rsl::cstring* cpaths) : windowHandle(windowHandle)
         {
             for (int i = 0; i < count; i++)
                 paths.push_back(cpaths[i]);

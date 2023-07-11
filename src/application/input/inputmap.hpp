@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <cstddef>
 
-namespace legion::application
+namespace rythe::application
 {
     struct inputmap
     {

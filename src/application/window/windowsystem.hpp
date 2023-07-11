@@ -7,7 +7,7 @@
 /**@file windowsystem.hpp
 */
 
-namespace legion::application
+namespace rythe::application
 {
     /**@class WindowSystem
      * @brief The system that's responsible for raising and polling all window events,
@@ -30,7 +30,7 @@ namespace legion::application
             window_request(id_type entityId, math::ivec2 size, const std::string& name, assets::asset<image> icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints)
                 : entityId(entityId), size(size), name(name), icon(icon), monitor(monitor), share(share), swapInterval(swapInterval), hints(hints)
             {}
-            window_request(id_type entityId, math::ivec2 size = { 400, 400 }, const std::string& name = "LEGION Engine", assets::asset<image> icon = assets::invalid_asset<image>, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0)
+            window_request(id_type entityId, math::ivec2 size = { 400, 400 }, const std::string& name = "RYTHE Engine", assets::asset<image> icon = assets::invalid_asset<image>, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0)
                 : entityId(entityId), size(size), name(name), icon(icon), monitor(monitor), share(share), swapInterval(swapInterval)
             {}
 
@@ -123,7 +123,7 @@ namespace legion::application
         static void requestFullscreenToggle(id_type entityId, math::ivec2 position = { 100 ,100 }, math::ivec2 size = { 400, 400 });
 
         static void requestWindow(id_type entityId, math::ivec2 size, const std::string& name, assets::asset<image> icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints);
-        static void requestWindow(id_type entityId, math::ivec2 size = { 400, 400 }, const std::string& name = "LEGION Engine", assets::asset<image> icon = assets::invalid_asset<image>, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0);
+        static void requestWindow(id_type entityId, math::ivec2 size = { 400, 400 }, const std::string& name = "RYTHE Engine", assets::asset<image> icon = assets::invalid_asset<image>, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0);
         static void requestWindow(id_type entityId, math::ivec2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints);
         static void requestWindow(id_type entityId, math::ivec2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0);
 

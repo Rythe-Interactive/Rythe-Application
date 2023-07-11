@@ -26,7 +26,7 @@ project "application"
     kind "StaticLib"
     language "C++"
     cppdialect "C++20"
-    includedirs { "../","../../third_party/","../../../core/src/"}
+    includedirs { "../","../../third_party/**"}
     defines { "RYTHE_INTERNAL", "PROJECT_NAME=application" }
 
     files {"**.h", "**.hpp" ,"**.inl","**.c", "**.cpp"}

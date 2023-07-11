@@ -3,7 +3,7 @@
 #include <core/events/event.hpp>
 #include <application/window/window.hpp>
 
-namespace legion::application
+namespace rythe::application
 {
     struct key_input final : public events::event<key_input>
     {

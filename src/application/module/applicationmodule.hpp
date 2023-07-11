@@ -4,7 +4,7 @@
 #include <application/window/windowsystem.hpp>
 #include <application/input/inputsystem.hpp>
 
-namespace legion::application
+namespace rythe::application
 {
     class ApplicationModule : public Module
     {

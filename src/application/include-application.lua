@@ -21,7 +21,7 @@ DEALINGS IN THE SOFTWARE.
 
 ]]--
 
-includedirs { "../","../../third_party/"}
+includedirs { "../","../../third_party/**"}
 dependson { "core", "application" }
 filter "kind:not StaticLib"
     links { "application", "GL", "dl","imgui"}

@@ -3,7 +3,7 @@
 #include <application/events/windowinputevents.hpp>
 #include <numeric>
 
-namespace legion::application
+namespace rythe::application
 {
 
 
@@ -65,7 +65,7 @@ namespace legion::application
                     //that are already connected
 
                     //note that GLFW only supports 16 gamepads!
-                    for (size_type i = 0; i < inputmap::modifier_keys::MAX_SIZE - inputmap::modifier_keys::JOYSTICK0; ++i)
+                    for (rsl::size_type i = 0; i < inputmap::modifier_keys::MAX_SIZE - inputmap::modifier_keys::JOYSTICK0; ++i)
                     {
                         if (ContextHelper::joystickPresent(i))
                         {
@@ -353,7 +353,7 @@ namespace legion::application
         }
 
         void matchGLFWAxisWithSignalAxis(const GLFWgamepadstate& state, inputmap::modifier_keys joystick,
-            const size_type glfw, inputmap::method m)
+            const rsl::size_type glfw, inputmap::method m)
         {
             const float value = state.axes[glfw];
             for (auto [_, axis] : m_axes[m])
