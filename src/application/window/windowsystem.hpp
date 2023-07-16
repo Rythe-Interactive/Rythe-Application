@@ -1,8 +1,11 @@
 #pragma once
-#include <application/window/window.hpp>
-#include <application/context/contexthelper.hpp>
-#include <application/events/windowevents.hpp>
-#include <application/events/windowinputevents.hpp>
+
+#include <rsl/time>
+
+#include "application/window/window.hpp"
+#include "application/context/contexthelper.hpp"
+#include "application/events/windowevents.hpp"
+#include "application/events/windowinputevents.hpp"
 
 /**@file windowsystem.hpp
 */
@@ -18,8 +21,8 @@ namespace rythe::application
     private:
         struct window_request
         {
-            id_type entityId;
-            math::ivec2 size;
+            rsl::id_type entityId;
+            math::int2 size;
             std::string name;
             assets::asset<image> icon;
             GLFWmonitor* monitor;
@@ -27,37 +30,37 @@ namespace rythe::application
             int swapInterval;
             std::vector<std::pair<int, int>> hints;
 
-            window_request(id_type entityId, math::ivec2 size, const std::string& name, assets::asset<image> icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints)
+            window_request(rsl::id_type entityId, math::int2 size, const std::string& name, assets::asset<image> icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints)
                 : entityId(entityId), size(size), name(name), icon(icon), monitor(monitor), share(share), swapInterval(swapInterval), hints(hints)
             {}
-            window_request(id_type entityId, math::ivec2 size = { 400, 400 }, const std::string& name = "RYTHE Engine", assets::asset<image> icon = assets::invalid_asset<image>, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0)
+            window_request(rsl::id_type entityId, math::int2 size = { 400, 400 }, const std::string& name = "RYTHE Engine", assets::asset<image> icon = assets::invalid_asset<image>, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0)
                 : entityId(entityId), size(size), name(name), icon(icon), monitor(monitor), share(share), swapInterval(swapInterval)
             {}
 
-            window_request(id_type entityId, math::ivec2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints)
+            window_request(rsl::id_type entityId, math::int2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints)
                 : entityId(entityId), size(size), name(name), icon(assets::get<image>(iconName)), monitor(monitor), share(share), swapInterval(swapInterval), hints(hints)
             {}
-            window_request(id_type entityId, math::ivec2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0)
+            window_request(rsl::id_type entityId, math::int2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0)
                 : entityId(entityId), size(size), name(name), icon(assets::get<image>(iconName)), monitor(monitor), share(share), swapInterval(swapInterval)
             {}
         };
 
         struct fullscreen_toggle_request
         {
-            id_type entityId;
-            math::ivec2 position;
-            math::ivec2 size;
+            rsl::id_type entityId;
+            math::int2 position;
+            math::int2 size;
 
-            fullscreen_toggle_request(id_type entityId, math::ivec2 position = { 100 ,100 }, math::ivec2 size = { 400, 400 }) : entityId(entityId), position(position), size(size) {}
+            fullscreen_toggle_request(rsl::id_type entityId, math::int2 position = { 100 ,100 }, math::int2 size = { 400, 400 }) : entityId(entityId), position(position), size(size) {}
         };
 
         struct icon_request
         {
-            id_type entityId;
+            rsl::id_type entityId;
             assets::asset<image> icon;
 
-            icon_request(id_type entityId, assets::asset<image> icon) : entityId(entityId), icon(icon) {}
-            icon_request(id_type entityId, const std::string& iconName) : entityId(entityId), icon(assets::get<image>(iconName)) {}
+            icon_request(rsl::id_type entityId, assets::asset<image> icon) : entityId(entityId), icon(icon) {}
+            icon_request(rsl::id_type entityId, const std::string& iconName) : entityId(entityId), icon(assets::get<image>(iconName)) {}
         };
 
         static sparse_map<GLFWwindow*, ecs::component<window>> m_windowComponents;
@@ -103,7 +106,7 @@ namespace rythe::application
 
         static void onKeyInput(GLFWwindow* window, int key, int scancode, int action, int mods);
 
-        static void onCharInput(GLFWwindow* window, uint codepoint);
+        static void onCharInput(GLFWwindow* window, rsl::uint codepoint);
 
         static void onMouseMoved(GLFWwindow* window, double xpos, double ypos);
 
@@ -117,15 +120,15 @@ namespace rythe::application
     public:
         static bool windowStillExists(GLFWwindow* win);
 
-        static void requestIconChange(id_type entityId, assets::asset<image> icon);
-        static void requestIconChange(id_type entityId, const std::string& iconName);
+        static void requestIconChange(rsl::id_type entityId, assets::asset<image> icon);
+        static void requestIconChange(rsl::id_type entityId, const std::string& iconName);
 
-        static void requestFullscreenToggle(id_type entityId, math::ivec2 position = { 100 ,100 }, math::ivec2 size = { 400, 400 });
+        static void requestFullscreenToggle(rsl::id_type entityId, math::int2 position = { 100 ,100 }, math::int2 size = { 400, 400 });
 
-        static void requestWindow(id_type entityId, math::ivec2 size, const std::string& name, assets::asset<image> icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints);
-        static void requestWindow(id_type entityId, math::ivec2 size = { 400, 400 }, const std::string& name = "RYTHE Engine", assets::asset<image> icon = assets::invalid_asset<image>, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0);
-        static void requestWindow(id_type entityId, math::ivec2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints);
-        static void requestWindow(id_type entityId, math::ivec2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0);
+        static void requestWindow(rsl::id_type entityId, math::int2 size, const std::string& name, assets::asset<image> icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints);
+        static void requestWindow(rsl::id_type entityId, math::int2 size = { 400, 400 }, const std::string& name = "RYTHE Engine", assets::asset<image> icon = assets::invalid_asset<image>, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0);
+        static void requestWindow(rsl::id_type entityId, math::int2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints);
+        static void requestWindow(rsl::id_type entityId, math::int2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0);
 
         void showMainWindow()
         {
@@ -145,8 +148,8 @@ namespace rythe::application
 
         void updateWindowIcons();
 
-        void refreshWindows(time::time_span<fast_time> deltaTime);
+        void refreshWindows(rsl::time_span<rsl::fast_time> deltaTime);
 
-        void handleWindowEvents(time::time_span<fast_time> deltaTime);
+        void handleWindowEvents(rsl::time_span<rsl::fast_time> deltaTime);
     };
 }

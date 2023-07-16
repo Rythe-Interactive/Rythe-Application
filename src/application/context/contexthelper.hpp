@@ -1,9 +1,9 @@
 #pragma once
-#include <core/core.hpp>
+#include "core/core.hpp"
 
 #if !defined(DOXY_EXCLUDE)
-#include <application/context/detail/glad/glad.h>
-#include <glfw/glfw3.h>
+#include "application/context/detail/glad/glad.h"
+#include <glfw3.h>
 #endif
 
 /**
@@ -42,16 +42,16 @@ namespace rythe::application
         /**@brief Binds callback to be executed right after the context has been initialized.
          *        The callback will be invoked immediately if the context is already initialized.
          */
-        static bool addOnInitCallback(delegate<void()> callback);
+        static bool addOnInitCallback(rsl::delegate<void()> callback);
         static void terminate();
         static int getError(rsl::cstring* desc);
         static GLFWmonitor* getPrimaryMonitor();
         static GLFWmonitor* getCurrentMonitor(GLFWwindow* window);
-        static void setWindowMonitor(GLFWwindow* window, GLFWmonitor* monitor, math::ivec2 pos, math::ivec2 size, int refreshRate);
+        static void setWindowMonitor(GLFWwindow* window, GLFWmonitor* monitor, rsl::math::int2 pos, rsl::math::int2 size, int refreshRate);
         static const GLFWvidmode* getPrimaryVideoMode();
         static const GLFWvidmode* getVideoMode(GLFWmonitor* monitor);
         static void windowHint(int hint, int value);
-        static GLFWwindow* createWindow(math::ivec2 dim, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
+        static GLFWwindow* createWindow(rsl::math::int2 dim, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
         static GLFWwindow* createWindow(int width, int height, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
         /**@brief Request the input thread to give focus to this window.
          */
@@ -65,10 +65,10 @@ namespace rythe::application
         static void setWindowIcon(GLFWwindow* window, int count, const GLFWimage* images);
         static void setWindowAttrib(GLFWwindow* window, int attrib, int value);
         static void setWindowPos(GLFWwindow* window, int x, int y);
-        static void setWindowPos(GLFWwindow* window, math::ivec2 pos);
-        static math::ivec2 getWindowPos(GLFWwindow* window);
+        static void setWindowPos(GLFWwindow* window, rsl::math::int2 pos);
+        static rsl::math::int2 getWindowPos(GLFWwindow* window);
         static void destroyWindow(GLFWwindow* window);
-        static math::ivec2 getFramebufferSize(GLFWwindow* window);
+        static rsl::math::int2 getFramebufferSize(GLFWwindow* window);
         static void swapBuffers(GLFWwindow* window);
         static void swapInterval(int interval);
         static void pollEvents();

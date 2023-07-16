@@ -1,17 +1,18 @@
 #pragma once
-#include <application/events/inputevents.hpp>
-#include <application/events/windowinputevents.hpp>
 #include <numeric>
+
+#include <rsl/delegate>
+#include <rsl/primitives>
+
+#include "application/events/inputevents.hpp"
+#include "application/events/windowinputevents.hpp"
 
 namespace rythe::application
 {
-
-
-
     class InputSystem : public core::System<InputSystem>
     {
 
-        using action_callback = delegate<void(InputSystem*, bool, inputmap::modifier_keys, inputmap::method, float, float)>;
+        using action_callback = rsl::delegate<void(InputSystem*, bool, inputmap::modifier_keys, inputmap::method, float, float)>;
 
         struct action_data
         {
@@ -25,7 +26,7 @@ namespace rythe::application
             bool repeat;
         };
 
-        using axis_callback = delegate<void(InputSystem*, float, inputmap::modifier_keys, inputmap::method, float)>;
+        using axis_callback = rsl::delegate<void(InputSystem*, float, inputmap::modifier_keys, inputmap::method, float)>;
 
         struct axis_data
         {
@@ -41,7 +42,7 @@ namespace rythe::application
             std::vector<float> values;
             std::vector<inputmap::modifier_keys> mods;
             std::vector<inputmap::method> methods;
-            delegate<void()> invoke;
+            rsl::delegate<void()> invoke;
         };
 
     public:
@@ -57,7 +58,7 @@ namespace rythe::application
             createProcess<&InputSystem::onUpdate>("Input");
 
             //make sure we get the joystick-callback on initialization of GLFW
-            ContextHelper::addOnInitCallback(delegate<void()>::from([]
+            ContextHelper::addOnInitCallback(rsl::delegate<void()>::create([]
                 {
                     ContextHelper::setJoystickCallback(&InputSystem::onCheckGamepadPresence);
 
@@ -78,12 +79,12 @@ namespace rythe::application
 
         }
 
-        inline static math::dvec2 getMousePosition()
+        inline static math::double2 getMousePosition()
         {
             return m_mousePos;
         }
 
-        inline static math::dvec2 getMouseDelta()
+        inline static math::double2 getMouseDelta()
         {
             return m_mouseDelta;
         }
@@ -182,11 +183,11 @@ namespace rythe::application
                     {
                         if (inputmap::is_key(member))
                         {
-                            m_actions[member][typeHash<Event>()].callback.clear();
+                            m_actions[member][rsl::typeHash<Event>()].callback.clear();
                         }
                         if (inputmap::is_axis(member))
                         {
-                            m_axes[member][typeHash<Event>()].callback.clear();
+                            m_axes[member][rsl::typeHash<Event>()].callback.clear();
                         }
                     }
                 }
@@ -194,11 +195,11 @@ namespace rythe::application
                 {
                     if (inputmap::is_key(met))
                     {
-                        m_actions[met][typeHash<Event>()].callback.clear();
+                        m_actions[met][rsl::typeHash<Event>()].callback.clear();
                     }
                     if (inputmap::is_axis(met))
                     {
-                        m_axes[met][typeHash<Event>()].callback.clear();
+                        m_axes[met][rsl::typeHash<Event>()].callback.clear();
                     }
                 }
             }
@@ -210,11 +211,11 @@ namespace rythe::application
                     {
                         if (inputmap::is_key(member))
                         {
-                            m_actions[member][typeHash<Event>()].callback.clear();
+                            m_actions[member][rsl::typeHash<Event>()].callback.clear();
                         }
                         if (inputmap::is_axis(member))
                         {
-                            m_axes[member][typeHash<Event>()].callback.clear();
+                            m_axes[member][rsl::typeHash<Event>()].callback.clear();
                         }
                     }
                 }
@@ -222,11 +223,11 @@ namespace rythe::application
                 {
                     if (inputmap::is_key(met))
                     {
-                        m_actions[met][typeHash<Event>()].callback.clear();
+                        m_actions[met][rsl::typeHash<Event>()].callback.clear();
                     }
                     if (inputmap::is_axis(met))
                     {
-                        m_axes[met][typeHash<Event>()].callback.clear();
+                        m_axes[met][rsl::typeHash<Event>()].callback.clear();
                     }
                 }
             }
@@ -238,7 +239,7 @@ namespace rythe::application
         static void bindKeyToAction(inputmap::method m)
         {
             //creates a tuple with default value 0
-            auto& data = m_actions[m][typeHash<Event>()];
+            auto& data = m_actions[m][rsl::typeHash<Event>()];
 
             data.callback = action_callback::from(
                 [](InputSystem* self, bool state, inputmap::modifier_keys mods, inputmap::method method, float def, float delta)
@@ -258,7 +259,7 @@ namespace rythe::application
         template<class Event>
         static void bindKeyToAxis(inputmap::method m, float value)
         {
-            auto& data = m_actions[m][typeHash<Event>()];
+            auto& data = m_actions[m][rsl::typeHash<Event>()];
 
             data.callback = action_callback::from(
                 [](InputSystem* self, bool state, inputmap::modifier_keys mods, inputmap::method method, float def, float delta)
@@ -277,7 +278,7 @@ namespace rythe::application
         static void bindAxisToAction(inputmap::method m, float value)
         {
 
-            auto& data = m_axes[m][typeHash<Event>()];
+            auto& data = m_axes[m][rsl::typeHash<Event>()];
 
             data.callback = axis_callback::from(
                 [](InputSystem* self, float value, inputmap::modifier_keys mods, inputmap::method method, float delta)
@@ -298,7 +299,7 @@ namespace rythe::application
         static void bindAxisToAxis(inputmap::method m, float value)
         {
 
-            auto& data = m_axes[m][typeHash<Event>()];
+            auto& data = m_axes[m][rsl::typeHash<Event>()];
 
             data.callback = axis_callback::from(
                 [](InputSystem* self, float value, inputmap::modifier_keys mods, inputmap::method method, float delta)
@@ -321,7 +322,7 @@ namespace rythe::application
                 m_presentGamepads.erase(jid);
         }
 
-        void onUpdate(time::time_span<fast_time> deltaTime)
+        void onUpdate(rsl::time_span<rsl::fast_time> deltaTime)
         {
             onJoystick(deltaTime);
 
@@ -576,15 +577,15 @@ namespace rythe::application
             }
         }
 
-        static math::dvec2 m_mousePos;
-        static math::dvec2 m_mouseDelta;
+        static math::double2 m_mousePos;
+        static math::double2 m_mouseDelta;
 
         static std::set<int> m_presentGamepads;
-        static sparse_map<inputmap::method, sparse_map<id_type, action_data>> m_actions;
+        static sparse_map<inputmap::method, sparse_map<rsl::id_type, action_data>> m_actions;
 
-        static sparse_map<inputmap::method, sparse_map<id_type, axis_data>>  m_axes;
+        static sparse_map<inputmap::method, sparse_map<rsl::id_type, axis_data>>  m_axes;
 
-        static sparse_map<id_type,axis_command_queue> m_axes_command_queues;
+        static sparse_map<rsl::id_type,axis_command_queue> m_axes_command_queues;
 
     };
 }

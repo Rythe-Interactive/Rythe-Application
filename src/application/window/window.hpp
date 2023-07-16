@@ -25,7 +25,7 @@ namespace rythe::application
 
         void enableCursor(bool enabled) const;
 
-        void setSwapInterval(uint interval);
+        void setSwapInterval(rsl::uint interval);
 
         void show() const;
 
@@ -33,9 +33,9 @@ namespace rythe::application
 
         bool isFullscreen() const;
 
-        math::ivec2 size() const;
+        math::int2 size() const;
 
-        math::ivec2 framebufferSize() const;
+        math::int2 framebufferSize() const;
 
         const std::string& title() const;
 
@@ -46,12 +46,12 @@ namespace rythe::application
         window(std::string m_title,
             bool m_isFullscreen,
             int m_swapInterval,
-            math::ivec2 m_size) {}
+            math::int2 m_size) {}
 
         std::string m_title;
         bool m_isFullscreen;
         int m_swapInterval;
-        math::ivec2 m_size;
+        math::int2 m_size;
     };
 
     const window invalid_window = {};

@@ -18,7 +18,7 @@ namespace rythe::application
             reportSystem<InputSystem>();
         }
 
-        virtual priority_type priority() override
+        virtual rsl::priority_type priority() override
         {
             return 100;
         }
