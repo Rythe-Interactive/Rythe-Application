@@ -12,6 +12,7 @@
 
 namespace rythe::application
 {
+    namespace math = rsl::math;
     /**@class WindowSystem
      * @brief The system that's responsible for raising and polling all window events,
      *        swapping the buffers of the windows and creation and destruction of windows.

@@ -9,7 +9,7 @@ namespace rythe::application
         ContextHelper::setInputMode(handle, GLFW_CURSOR, enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
     }
 
-    void window::setSwapInterval(uint interval)
+    void window::setSwapInterval(rsl::uint interval)
     {
         context_guard guard(*this);
         ContextHelper::swapInterval(interval);

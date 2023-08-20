@@ -1,4 +1,4 @@
-#include <application/window/windowsystem.hpp>
+#include "application/window/windowsystem.hpp"
 
 namespace rythe::application
 {
@@ -103,7 +103,7 @@ namespace rythe::application
     void WindowSystem::onWindowContentRescale(GLFWwindow* window, float xscale, float yscale)
     {
         if (m_windowComponents.contains(window))
-            raiseEvent<window_content_rescale>(m_windowComponents[window], math::fvec2(xscale, xscale));
+            raiseEvent<window_content_rescale>(m_windowComponents[window], math::vec2(xscale, xscale));
     }
 
     void WindowSystem::onItemDroppedInWindow(GLFWwindow* window, int count, const char** paths)
@@ -124,7 +124,7 @@ namespace rythe::application
             raiseEvent<key_input>(m_windowComponents[window], key, scancode, action, mods);
     }
 
-    void WindowSystem::onCharInput(GLFWwindow* window, uint codepoint)
+    void WindowSystem::onCharInput(GLFWwindow* window, rsl::uint codepoint)
     {
         if (m_windowComponents.contains(window))
             raiseEvent<char_input>(m_windowComponents[window], codepoint);
@@ -187,7 +187,7 @@ namespace rythe::application
         return m_windowComponents.contains(win);
     }
 
-    void WindowSystem::requestIconChange(id_type entityId, assets::asset<image> icon)
+    void WindowSystem::requestIconChange(rsl::id_type entityId, assets::asset<image> icon)
     {
         if (entityId)
         {
@@ -198,7 +198,7 @@ namespace rythe::application
             log::warn("Icon change denied, invalid entity given.");
     }
 
-    void WindowSystem::requestIconChange(id_type entityId, const std::string& iconName)
+    void WindowSystem::requestIconChange(rsl::id_type entityId, const std::string& iconName)
     {
         if (entityId)
         {
@@ -209,7 +209,7 @@ namespace rythe::application
             log::warn("Icon change denied, invalid entity given.");
     }
 
-    void WindowSystem::requestFullscreenToggle(id_type entityId, math::int2 position, math::int2 size)
+    void WindowSystem::requestFullscreenToggle(rsl::id_type entityId, math::int2 position, math::int2 size)
     {
         if (entityId)
         {
@@ -220,7 +220,7 @@ namespace rythe::application
             log::warn("Fullscreen toggle denied, invalid entity given.");
     }
 
-    void WindowSystem::requestWindow(id_type entityId, math::int2 size, const std::string& name, assets::asset<image> icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints)
+    void WindowSystem::requestWindow(rsl::id_type entityId, math::int2 size, const std::string& name, assets::asset<image> icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints)
     {
         if (entityId)
         {
@@ -231,7 +231,7 @@ namespace rythe::application
             log::warn("Window creation denied, invalid entity given.");
     }
 
-    void WindowSystem::requestWindow(id_type entityId, math::int2 size, const std::string& name, assets::asset<image> icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval)
+    void WindowSystem::requestWindow(rsl::id_type entityId, math::int2 size, const std::string& name, assets::asset<image> icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval)
     {
         if (entityId)
         {
@@ -242,7 +242,7 @@ namespace rythe::application
             log::warn("Window creation denied, invalid entity given.");
     }
 
-    void WindowSystem::requestWindow(id_type entityId, math::int2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints)
+    void WindowSystem::requestWindow(rsl::id_type entityId, math::int2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints)
     {
         if (entityId)
         {
@@ -253,7 +253,7 @@ namespace rythe::application
             log::warn("Window creation denied, invalid entity given.");
     }
 
-    void WindowSystem::requestWindow(id_type entityId, math::int2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval)
+    void WindowSystem::requestWindow(rsl::id_type entityId, math::int2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval)
     {
         if (entityId)
         {

@@ -1,9 +1,9 @@
-#include <application/context/contexthelper.hpp>
+#include "application/context/contexthelper.hpp"
 
 namespace rythe::application
 {
     std::atomic_bool ContextHelper::m_initialized;
-    atomic_sparse_map<GLFWwindow*, bool> ContextHelper::m_windowInitialized;
+    //atomic_sparse_map<GLFWwindow*, bool> ContextHelper::m_windowInitialized;
 
     async::rw_spinlock ContextHelper::m_initCallbackLock;
     rsl::multicast_delegate<void()> ContextHelper::m_onInit;

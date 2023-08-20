@@ -21,7 +21,18 @@ DEALINGS IN THE SOFTWARE.
 
 ]]--
 
-includedirs { "../","../../third_party/**"}
+print("including application")
+includedirs {
+    "$(SolutionDir)rythe\\engine\\application\\src",
+    "$(SolutionDir)rythe\\engine\\application\\third_party",
+    "third_party/*/src",
+    "third_party/*/include",
+    "third_party/"
+}
 dependson { "core", "application" }
 filter "kind:not StaticLib"
-    links { "application", "GL", "dl","imgui"}
+    links { "application","glfw3"}
+
+filter ""
+
+
