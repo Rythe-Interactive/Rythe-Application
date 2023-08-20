@@ -3,7 +3,7 @@
 
 #if !defined(DOXY_EXCLUDE)
 #include "application/context/detail/glad/glad.h"
-#include <glfw3.h>
+#include <glfw/glfw3.h>
 #endif
 
 /**
