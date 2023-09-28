@@ -21,8 +21,8 @@ namespace rythe::application
         inputmap::modifier_keys mods{};
         inputmap::method identifier{};
 
-        R_NODISCARD bool pressed()  const { return value == true;  }
-        R_NODISCARD bool released() const { return value == false; }
+        [[nodiscard]] bool pressed()  const { return value == true;  }
+        [[nodiscard]] bool released() const { return value == false; }
     };
 
     template <class T>
