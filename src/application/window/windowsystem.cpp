@@ -269,7 +269,7 @@ namespace rythe::application
         using namespace filesystem::literals;
 
         m_exit = false;
-        m_defaultIcon = assets::load<image>("RYTHE Icon", "engine://resources/rythe/icon"_view, assets::import_settings<image>{ true, true, false });
+        m_defaultIcon = assets::load<image>("RYTHE Icon", "engine://resources/rythe/icon.png"_view, assets::import_settings<image>{ true, true, false });
 
         bindToEvent<events::exit, &WindowSystem::onExit>();
 
