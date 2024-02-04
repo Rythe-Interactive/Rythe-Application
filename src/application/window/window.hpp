@@ -1,6 +1,6 @@
 #pragma once
-#include <vector>
 #include <utility>
+#include <vector>
 
 #include "application/context/contexthelper.hpp"
 
@@ -9,84 +9,88 @@
 
 namespace rythe::application
 {
-    struct window
-    {
+	struct window
+	{
 
-        friend class WindowSystem;
+		friend class WindowSystem;
 
-        window() = default;
-        window(GLFWwindow* ptr) : handle(ptr) {}
+		window() = default;
+		window(GLFWwindow* ptr)
+			: handle(ptr)
+		{
+		}
 
-        GLFWwindow* handle;
-        async::spinlock* lock;
+		GLFWwindow* handle;
+		async::spinlock* lock;
 
-        operator GLFWwindow* () const { return handle; }
-        window& operator=(GLFWwindow* ptr) { handle = ptr; return *this; }
+		operator GLFWwindow*() const { return handle; }
+		window& operator=(GLFWwindow* ptr)
+		{
+			handle = ptr;
+			return *this;
+		}
 
-        void enableCursor(bool enabled) const;
+		void enableCursor(bool enabled) const;
 
-        void setSwapInterval(rsl::uint interval);
+		void setSwapInterval(rsl::uint interval);
 
-        void show() const;
+		void show() const;
 
-        int swapInterval() const;
+		int swapInterval() const;
 
-        bool isFullscreen() const;
+		bool isFullscreen() const;
 
-        math::int2 size() const;
+		math::int2 size() const;
 
-        math::int2 framebufferSize() const;
+		math::int2 framebufferSize() const;
 
-        const std::string& title() const;
+		const std::string& title() const;
 
-    private:
-        // This constructor only exists temporarily untill this get's an entire overhoal.
-        // The reason for it's existance is to make reflection compile for the window in order to work with the new ECS.
-        // Window should never have been a component.
-        window(std::string m_title,
-            bool m_isFullscreen,
-            int m_swapInterval,
-            math::int2 m_size) {}
+	private:
+		// This constructor only exists temporarily untill this get's an entire overhoal.
+		// The reason for it's existance is to make reflection compile for the window in order to work with the new ECS.
+		// Window should never have been a component.
+		window(std::string m_title, bool m_isFullscreen, int m_swapInterval, math::int2 m_size) {}
 
-        std::string m_title;
-        bool m_isFullscreen;
-        int m_swapInterval;
-        math::int2 m_size;
-    };
+		std::string m_title;
+		bool m_isFullscreen;
+		int m_swapInterval;
+		math::int2 m_size;
+	};
 
-    const window invalid_window = {};
+	const window invalid_window = {};
 
-    struct context_guard
-    {
-    private:
-        bool m_contextIsValid = false;
+	struct context_guard
+	{
+	private:
+		bool m_contextIsValid = false;
 
-    public:
-        context_guard(const window& win);
-        bool contextIsValid() { return m_contextIsValid; }
+	public:
+		context_guard(const window& win);
+		bool contextIsValid() { return m_contextIsValid; }
 
-        context_guard() = delete;
-        context_guard(const context_guard&) = delete;
-        context_guard(context_guard&&) = delete;
+		context_guard() = delete;
+		context_guard(const context_guard&) = delete;
+		context_guard(context_guard&&) = delete;
 
-        ~context_guard();
+		~context_guard();
 
-    private:
-        const window& m_win;
-    };
+	private:
+		const window& m_win;
+	};
 
-}
+} // namespace rythe::application
 
 #if !defined(DOXY_EXCLUDE)
 namespace std
 {
-    template<>
-    struct hash<rythe::application::window>
-    {
-        std::size_t operator()(rythe::application::window const& win) const noexcept
-        {
-            return std::hash<intptr_t>{}(reinterpret_cast<intptr_t>(win.handle));
-        }
-    };
-}
+	template <>
+	struct hash<rythe::application::window>
+	{
+		std::size_t operator()(rythe::application::window const& win) const noexcept
+		{
+			return std::hash<intptr_t>{}(reinterpret_cast<intptr_t>(win.handle));
+		}
+	};
+} // namespace std
 #endif
