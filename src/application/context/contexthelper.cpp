@@ -17,10 +17,7 @@ namespace rythe::application
 
 	bool ContextHelper::init()
 	{
-		glfwSetErrorCallback([](int code, rsl::cstring desc)
-		{
-			log::error("GLFW ERROR {}: {}", code, desc);
-		});
+		glfwSetErrorCallback([](int code, rsl::cstring desc) { log::error("GLFW ERROR {}: {}", code, desc); });
 
 		bool success = glfwInit();
 		if (success)
@@ -86,9 +83,8 @@ namespace rythe::application
 			mw = mode->width;
 			mh = mode->height;
 
-			overlap =
-				math::max(0, math::min(wx + ww, mx + mw) - math::max(wx, mx)) *
-				math::max(0, math::min(wy + wh, my + mh) - math::max(wy, my));
+			overlap = math::max(0, math::min(wx + ww, mx + mw) - math::max(wx, mx)) *
+					  math::max(0, math::min(wy + wh, my + mh) - math::max(wy, my));
 
 			if (bestoverlap < overlap)
 			{
@@ -100,7 +96,9 @@ namespace rythe::application
 		return bestmonitor;
 	}
 
-	void ContextHelper::setWindowMonitor(GLFWwindow* window, GLFWmonitor* monitor, math::int2 pos, math::int2 size, int refreshRate)
+	void ContextHelper::setWindowMonitor(
+		GLFWwindow* window, GLFWmonitor* monitor, math::int2 pos, math::int2 size, int refreshRate
+	)
 	{
 		glfwSetWindowMonitor(window, monitor, pos.x, pos.y, size.x, size.y, refreshRate);
 	}
@@ -125,7 +123,8 @@ namespace rythe::application
 		return glfwCreateWindow(dim.x, dim.y, title, monitor, share);
 	}
 
-	GLFWwindow* ContextHelper::createWindow(int width, int height, const char* title, GLFWmonitor* monitor, GLFWwindow* share)
+	GLFWwindow*
+	ContextHelper::createWindow(int width, int height, const char* title, GLFWmonitor* monitor, GLFWwindow* share)
 	{
 		return glfwCreateWindow(width, height, title, monitor, share);
 	}
@@ -139,9 +138,12 @@ namespace rythe::application
 	{
 		GLFWwindow* focus = newFocus.load(std::memory_order_acquire);
 		if (!focus)
+		{
 			return;
+		}
 
-		while (!newFocus.compare_exchange_weak(focus, nullptr, std::memory_order_release, std::memory_order_relaxed));
+		while (!newFocus.compare_exchange_weak(focus, nullptr, std::memory_order_release, std::memory_order_relaxed))
+			;
 
 		glfwHideWindow(focus);
 		glfwShowWindow(focus);
@@ -156,7 +158,9 @@ namespace rythe::application
 	void ContextHelper::setWindowShouldClose(GLFWwindow* window, int value)
 	{
 		if (window)
+		{
 			glfwSetWindowShouldClose(window, value);
+		}
 	}
 
 	int ContextHelper::windowShouldClose(GLFWwindow* window)
@@ -194,7 +198,9 @@ namespace rythe::application
 	void ContextHelper::destroyWindow(GLFWwindow* window)
 	{
 		if (initialized())
+		{
 			glfwDestroyWindow(window);
+		}
 	}
 
 	math::int2 ContextHelper::getFramebufferSize(GLFWwindow* window)
@@ -207,7 +213,9 @@ namespace rythe::application
 	void ContextHelper::swapBuffers(GLFWwindow* window)
 	{
 		if (initialized())
+		{
 			glfwSwapBuffers(window);
+		}
 	}
 
 	void ContextHelper::swapInterval(int interval)
@@ -305,12 +313,14 @@ namespace rythe::application
 		return glfwSetWindowMaximizeCallback(window, callback);
 	}
 
-	GLFWframebuffersizefun ContextHelper::setFramebufferSizeCallback(GLFWwindow* window, GLFWframebuffersizefun callback)
+	GLFWframebuffersizefun
+	ContextHelper::setFramebufferSizeCallback(GLFWwindow* window, GLFWframebuffersizefun callback)
 	{
 		return glfwSetFramebufferSizeCallback(window, callback);
 	}
 
-	GLFWwindowcontentscalefun ContextHelper::setWindowContentScaleCallback(GLFWwindow* window, GLFWwindowcontentscalefun callback)
+	GLFWwindowcontentscalefun
+	ContextHelper::setWindowContentScaleCallback(GLFWwindow* window, GLFWwindowcontentscalefun callback)
 	{
 		return glfwSetWindowContentScaleCallback(window, callback);
 	}
@@ -323,7 +333,9 @@ namespace rythe::application
 	int ContextHelper::getGamepadSate(int jid, GLFWgamepadstate* state)
 	{
 		if (initialized())
+		{
 			return glfwGetGamepadState(jid, state);
+		}
 		return 0;
 	}
 

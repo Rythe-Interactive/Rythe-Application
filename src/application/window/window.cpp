@@ -52,17 +52,23 @@ namespace rythe::application
 		win.lock->lock();
 
 		if (!WindowSystem::windowStillExists(win.handle))
+		{
 			return;
+		}
 
 		m_contextIsValid = ContextHelper::makeContextCurrent(win);
 		if (!m_contextIsValid)
+		{
 			log::warn("Context is no longer valid.");
+		}
 	}
 
 	context_guard::~context_guard()
 	{
 		if (!m_contextIsValid)
+		{
 			return;
+		}
 
 		ContextHelper::makeContextCurrent(nullptr);
 		m_win.lock->unlock();

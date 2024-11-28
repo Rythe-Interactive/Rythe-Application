@@ -47,12 +47,16 @@ namespace rythe::application
 		static int getError(rsl::cstring* desc);
 		static GLFWmonitor* getPrimaryMonitor();
 		static GLFWmonitor* getCurrentMonitor(GLFWwindow* window);
-		static void setWindowMonitor(GLFWwindow* window, GLFWmonitor* monitor, math::int2 pos, math::int2 size, int refreshRate);
+		static void
+		setWindowMonitor(GLFWwindow* window, GLFWmonitor* monitor, math::int2 pos, math::int2 size, int refreshRate);
 		static const GLFWvidmode* getPrimaryVideoMode();
 		static const GLFWvidmode* getVideoMode(GLFWmonitor* monitor);
 		static void windowHint(int hint, int value);
-		static GLFWwindow* createWindow(math::int2 dim, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
-		static GLFWwindow* createWindow(int width, int height, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
+		static GLFWwindow*
+		createWindow(math::int2 dim, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
+		static GLFWwindow* createWindow(
+			int width, int height, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr
+		);
 		/**@brief Request the input thread to give focus to this window.
 		 */
 		static void showWindow(GLFWwindow* window);
@@ -89,7 +93,8 @@ namespace rythe::application
 		static GLFWwindowiconifyfun setWindowIconifyCallback(GLFWwindow* window, GLFWwindowiconifyfun callback);
 		static GLFWwindowmaximizefun setWindowMaximizeCallback(GLFWwindow* window, GLFWwindowmaximizefun callback);
 		static GLFWframebuffersizefun setFramebufferSizeCallback(GLFWwindow* window, GLFWframebuffersizefun callback);
-		static GLFWwindowcontentscalefun setWindowContentScaleCallback(GLFWwindow* window, GLFWwindowcontentscalefun callback);
+		static GLFWwindowcontentscalefun
+		setWindowContentScaleCallback(GLFWwindow* window, GLFWwindowcontentscalefun callback);
 		static GLFWjoystickfun setJoystickCallback(GLFWjoystickfun callback);
 		static int getGamepadSate(int jid, GLFWgamepadstate* state);
 		static void updateGamepadMappings(const char* name);

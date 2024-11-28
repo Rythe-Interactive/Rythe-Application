@@ -12,7 +12,8 @@ namespace rythe::application
 	class InputSystem : public core::System<InputSystem>
 	{
 
-		using action_callback = rsl::delegate<void(InputSystem*, bool, inputmap::modifier_keys, inputmap::method, float, float)>;
+		using action_callback =
+			rsl::delegate<void(InputSystem*, bool, inputmap::modifier_keys, inputmap::method, float, float)>;
 
 		struct action_data
 		{
@@ -26,7 +27,8 @@ namespace rythe::application
 			bool repeat;
 		};
 
-		using axis_callback = rsl::delegate<void(InputSystem*, float, inputmap::modifier_keys, inputmap::method, float)>;
+		using axis_callback =
+			rsl::delegate<void(InputSystem*, float, inputmap::modifier_keys, inputmap::method, float)>;
 
 		struct axis_data
 		{
@@ -66,7 +68,8 @@ namespace rythe::application
 				// that are already connected
 
 				// note that GLFW only supports 16 gamepads!
-				for (rsl::size_type i = 0; i < inputmap::modifier_keys::MAX_SIZE - inputmap::modifier_keys::JOYSTICK0; ++i)
+				for (rsl::size_type i = 0; i < inputmap::modifier_keys::MAX_SIZE - inputmap::modifier_keys::JOYSTICK0;
+					 ++i)
 				{
 					if (ContextHelper::joystickPresent(i))
 					{
@@ -78,15 +81,9 @@ namespace rythe::application
 			// ContextHelper::updateGamepadMappings("assets/conf/gamepad.conf");
 		}
 
-		inline static math::double2 getMousePosition()
-		{
-			return m_mousePos;
-		}
+		inline static math::double2 getMousePosition() { return m_mousePos; }
 
-		inline static math::double2 getMouseDelta()
-		{
-			return m_mouseDelta;
-		}
+		inline static math::double2 getMouseDelta() { return m_mouseDelta; }
 
 		/**
 		 * @brief Creates a Binding of a Key /Axis to the emission of an event in the event bus.
@@ -99,7 +96,10 @@ namespace rythe::application
 		template <class Event>
 		static void createBinding(inputmap::method k, float value = 1)
 		{
-			static_assert(std::is_base_of_v<input_action<Event>, Event> || std::is_base_of_v<input_axis<Event>, Event>, "Event needs to either be an input_action or an input_axis");
+			static_assert(
+				std::is_base_of_v<input_action<Event>, Event> || std::is_base_of_v<input_axis<Event>, Event>,
+				"Event needs to either be an input_action or an input_axis"
+			);
 
 			if constexpr (std::is_base_of_v<input_action<Event>, Event>)
 			{
@@ -167,7 +167,10 @@ namespace rythe::application
 		template <class Event>
 		static void removeBinding(inputmap::method met)
 		{
-			static_assert(std::is_base_of_v<input_action<Event>, Event> || std::is_base_of_v<input_axis<Event>, Event>, "Event needs to either be an input_action or an input_axis");
+			static_assert(
+				std::is_base_of_v<input_action<Event>, Event> || std::is_base_of_v<input_axis<Event>, Event>,
+				"Event needs to either be an input_action or an input_axis"
+			);
 
 			if constexpr (std::is_base_of_v<input_action<Event>, Event>)
 			{
@@ -236,16 +239,15 @@ namespace rythe::application
 			// creates a tuple with default value 0
 			auto& data = m_actions[m][rsl::typeHash<Event>()];
 
-			data.callback = action_callback::create(
-				[](InputSystem* self, bool state, inputmap::modifier_keys mods, inputmap::method method, float def, float delta)
+			data.callback = action_callback::create([](InputSystem* self, bool state, inputmap::modifier_keys mods,
+													   inputmap::method method, float def, float delta)
 			{
 				(void)def;
 				Event e;
 				e.input_delta = delta;
 				e.set(state, mods, method);
 				self->raiseEvent<Event>(e);
-			}
-			);
+			});
 			data.last_method = m;
 			data.last_mods = inputmap::modifier_keys::NONE;
 			data.repeat = false;
@@ -256,12 +258,9 @@ namespace rythe::application
 		{
 			auto& data = m_actions[m][rsl::typeHash<Event>()];
 
-			data.callback = action_callback::create(
-				[](InputSystem* self, bool state, inputmap::modifier_keys mods, inputmap::method method, float def, float delta)
-			{
-				self->pushCommand<Event>(state ? def : 0.0f, mods, method);
-			}
-			);
+			data.callback = action_callback::create([](InputSystem* self, bool state, inputmap::modifier_keys mods,
+													   inputmap::method method, float def, float delta)
+			{ self->pushCommand<Event>(state ? def : 0.0f, mods, method); });
 			data.trigger_value = value;
 			data.last_method = m;
 			data.last_mods = inputmap::modifier_keys::NONE;
@@ -275,15 +274,14 @@ namespace rythe::application
 
 			auto& data = m_axes[m][rsl::typeHash<Event>()];
 
-			data.callback = axis_callback::create(
-				[](InputSystem* self, float value, inputmap::modifier_keys mods, inputmap::method method, float delta)
+			data.callback = axis_callback::create([](InputSystem* self, float value, inputmap::modifier_keys mods,
+													 inputmap::method method, float delta)
 			{
 				Event e;
 				e.input_delta = delta;
 				e.set(value > 0.05f || value < -0.05f, mods, method); // convert float range 0-1 to key state false:true
 				self->raiseEvent<Event>(e);
-			}
-			);
+			});
 
 			data.last_value = value;
 			data.last_method = m;
@@ -296,12 +294,9 @@ namespace rythe::application
 
 			auto& data = m_axes[m][rsl::typeHash<Event>()];
 
-			data.callback = axis_callback::create(
-				[](InputSystem* self, float value, inputmap::modifier_keys mods, inputmap::method method, float delta)
-			{
-				self->pushCommand<Event>(value, mods, method);
-			}
-			);
+			data.callback = axis_callback::create([](InputSystem* self, float value, inputmap::modifier_keys mods,
+													 inputmap::method method, float delta)
+			{ self->pushCommand<Event>(value, mods, method); });
 
 			data.last_value = value;
 			data.last_method = m;
@@ -312,9 +307,13 @@ namespace rythe::application
 		static void onCheckGamepadPresence(int jid, int event)
 		{
 			if (event == GLFW_CONNECTED)
+			{
 				m_presentGamepads.insert(jid);
+			}
 			else if (event == GLFW_DISCONNECTED)
+			{
 				m_presentGamepads.erase(jid);
+			}
 		}
 
 		void onUpdate(rsl::time_span<rsl::fast_time> deltaTime)
@@ -338,7 +337,12 @@ namespace rythe::application
 					for (auto [_, action] : inner_map)
 					{
 						if (action.repeat)
-							action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, deltaTime);
+						{
+							action.callback(
+								this, action.last_state, action.last_mods, action.last_method, action.trigger_value,
+								deltaTime
+							);
+						}
 					}
 				}
 			}
@@ -348,7 +352,10 @@ namespace rythe::application
 			onMouseReset();
 		}
 
-		void matchGLFWAxisWithSignalAxis(const GLFWgamepadstate& state, inputmap::modifier_keys joystick, const rsl::size_type glfw, inputmap::method m)
+		void matchGLFWAxisWithSignalAxis(
+			const GLFWgamepadstate& state, inputmap::modifier_keys joystick, const rsl::size_type glfw,
+			inputmap::method m
+		)
 		{
 			const float value = state.axes[glfw];
 			for (auto [_, axis] : m_axes[m])
@@ -385,45 +392,121 @@ namespace rythe::application
 
 				GLFWgamepadstate state;
 				if (!ContextHelper::getGamepadSate(glfw_joystick_id, &state))
+				{
 					continue;
+				}
 
 				const auto joystick = mods::JOYSTICK0 + glfw_joystick_id;
 
 				for (auto [_, action] : m_actions[method::GAMEPAD_A])
-					action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_A], joystick, method::GAMEPAD_A, action.trigger_value, dt);
+				{
+					action.callback(
+						this, state.buttons[GLFW_GAMEPAD_BUTTON_A], joystick, method::GAMEPAD_A, action.trigger_value,
+						dt
+					);
+				}
 				for (auto [_, action] : m_actions[method::GAMEPAD_B])
-					action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_B], joystick, method::GAMEPAD_B, action.trigger_value, dt);
+				{
+					action.callback(
+						this, state.buttons[GLFW_GAMEPAD_BUTTON_B], joystick, method::GAMEPAD_B, action.trigger_value,
+						dt
+					);
+				}
 				for (auto [_, action] : m_actions[method::GAMEPAD_X])
-					action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_X], joystick, method::GAMEPAD_X, action.trigger_value, dt);
+				{
+					action.callback(
+						this, state.buttons[GLFW_GAMEPAD_BUTTON_X], joystick, method::GAMEPAD_X, action.trigger_value,
+						dt
+					);
+				}
 				for (auto [_, action] : m_actions[method::GAMEPAD_Y])
-					action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_Y], joystick, method::GAMEPAD_Y, action.trigger_value, dt);
+				{
+					action.callback(
+						this, state.buttons[GLFW_GAMEPAD_BUTTON_Y], joystick, method::GAMEPAD_Y, action.trigger_value,
+						dt
+					);
+				}
 				for (auto [_, action] : m_actions[method::GAMEPAD_LEFT_BUMPER])
-					action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_LEFT_BUMPER], joystick, method::GAMEPAD_LEFT_BUMPER, action.trigger_value, dt);
+				{
+					action.callback(
+						this, state.buttons[GLFW_GAMEPAD_BUTTON_LEFT_BUMPER], joystick, method::GAMEPAD_LEFT_BUMPER,
+						action.trigger_value, dt
+					);
+				}
 				for (auto [_, action] : m_actions[method::GAMEPAD_RIGHT_BUMPER])
-					action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER], joystick, method::GAMEPAD_RIGHT_BUMPER, action.trigger_value, dt);
+				{
+					action.callback(
+						this, state.buttons[GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER], joystick, method::GAMEPAD_RIGHT_BUMPER,
+						action.trigger_value, dt
+					);
+				}
 				for (auto [_, action] : m_actions[method::GAMEPAD_BACK])
-					action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_BACK], joystick, method::GAMEPAD_BACK, action.trigger_value, dt);
+				{
+					action.callback(
+						this, state.buttons[GLFW_GAMEPAD_BUTTON_BACK], joystick, method::GAMEPAD_BACK,
+						action.trigger_value, dt
+					);
+				}
 				for (auto [_, action] : m_actions[method::GAMEPAD_START])
-					action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_START], joystick, method::GAMEPAD_START, action.trigger_value, dt);
+				{
+					action.callback(
+						this, state.buttons[GLFW_GAMEPAD_BUTTON_START], joystick, method::GAMEPAD_START,
+						action.trigger_value, dt
+					);
+				}
 				for (auto [_, action] : m_actions[method::GAMEPAD_DPAD_UP])
-					action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_UP], joystick, method::GAMEPAD_DPAD_UP, action.trigger_value, dt);
+				{
+					action.callback(
+						this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_UP], joystick, method::GAMEPAD_DPAD_UP,
+						action.trigger_value, dt
+					);
+				}
 				for (auto [_, action] : m_actions[method::GAMEPAD_DPAD_RIGHT])
-					action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_RIGHT], joystick, method::GAMEPAD_DPAD_RIGHT, action.trigger_value, dt);
+				{
+					action.callback(
+						this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_RIGHT], joystick, method::GAMEPAD_DPAD_RIGHT,
+						action.trigger_value, dt
+					);
+				}
 				for (auto [_, action] : m_actions[method::GAMEPAD_DPAD_LEFT])
-					action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_LEFT], joystick, method::GAMEPAD_DPAD_LEFT, action.trigger_value, dt);
+				{
+					action.callback(
+						this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_LEFT], joystick, method::GAMEPAD_DPAD_LEFT,
+						action.trigger_value, dt
+					);
+				}
 				for (auto [_, action] : m_actions[method::GAMEPAD_DPAD_DOWN])
-					action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_DOWN], joystick, method::GAMEPAD_DPAD_DOWN, action.trigger_value, dt);
+				{
+					action.callback(
+						this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_DOWN], joystick, method::GAMEPAD_DPAD_DOWN,
+						action.trigger_value, dt
+					);
+				}
 				for (auto [_, action] : m_actions[method::GAMEPAD_LEFT_THUMB])
-					action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_LEFT_THUMB], joystick, method::GAMEPAD_LEFT_THUMB, action.trigger_value, dt);
+				{
+					action.callback(
+						this, state.buttons[GLFW_GAMEPAD_BUTTON_LEFT_THUMB], joystick, method::GAMEPAD_LEFT_THUMB,
+						action.trigger_value, dt
+					);
+				}
 				for (auto [_, action] : m_actions[method::GAMEPAD_RIGHT_THUMB])
-					action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_RIGHT_THUMB], joystick, method::GAMEPAD_RIGHT_THUMB, action.trigger_value, dt);
+				{
+					action.callback(
+						this, state.buttons[GLFW_GAMEPAD_BUTTON_RIGHT_THUMB], joystick, method::GAMEPAD_RIGHT_THUMB,
+						action.trigger_value, dt
+					);
+				}
 
 				matchGLFWAxisWithSignalAxis(state, joystick, GLFW_GAMEPAD_AXIS_LEFT_X, method::GAMEPAD_LEFT_X);
 				matchGLFWAxisWithSignalAxis(state, joystick, GLFW_GAMEPAD_AXIS_LEFT_Y, method::GAMEPAD_LEFT_Y);
-				matchGLFWAxisWithSignalAxis(state, joystick, GLFW_GAMEPAD_AXIS_LEFT_TRIGGER, method::GAMEPAD_LEFT_TRIGGER);
+				matchGLFWAxisWithSignalAxis(
+					state, joystick, GLFW_GAMEPAD_AXIS_LEFT_TRIGGER, method::GAMEPAD_LEFT_TRIGGER
+				);
 				matchGLFWAxisWithSignalAxis(state, joystick, GLFW_GAMEPAD_AXIS_RIGHT_X, method::GAMEPAD_RIGHT_X);
 				matchGLFWAxisWithSignalAxis(state, joystick, GLFW_GAMEPAD_AXIS_RIGHT_Y, method::GAMEPAD_RIGHT_Y);
-				matchGLFWAxisWithSignalAxis(state, joystick, GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER, method::GAMEPAD_RIGHT_TRIGGER);
+				matchGLFWAxisWithSignalAxis(
+					state, joystick, GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER, method::GAMEPAD_RIGHT_TRIGGER
+				);
 			}
 		}
 
@@ -433,13 +516,19 @@ namespace rythe::application
 			mods result = mods::NONE;
 
 			if (glfw_mods & GLFW_MOD_ALT)
+			{
 				result = static_cast<mods>(result & inputmap::modifier_keys::ALT);
+			}
 
 			if (glfw_mods & GLFW_MOD_SHIFT)
+			{
 				result = static_cast<mods>(result & inputmap::modifier_keys::SHIFT);
+			}
 
 			if (glfw_mods & GLFW_MOD_CONTROL)
+			{
 				result = static_cast<mods>(result & inputmap::modifier_keys::CTRL);
+			}
 
 			return result;
 		}
@@ -453,7 +542,11 @@ namespace rythe::application
 				action.last_mods = translateModifierKeys(window_key_event.mods);
 				action.last_method = m;
 				if (!action.repeat)
-					action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, 0.0f);
+				{
+					action.callback(
+						this, action.last_state, action.last_mods, action.last_method, action.trigger_value, 0.0f
+					);
+				}
 			}
 		}
 
@@ -462,10 +555,14 @@ namespace rythe::application
 			m_mouseDelta = window_mouse_event.position - m_mousePos;
 			m_mousePos = window_mouse_event.position;
 			if (math::abs(m_mouseDelta.x) < 0.0001)
+			{
 				m_mouseDelta.x = 0.0;
+			}
 
 			if (math::abs(m_mouseDelta.y) < 0.0001)
+			{
 				m_mouseDelta.y = 0.0;
+			}
 
 			for (auto [_, axis] : m_axes[inputmap::method::MOUSE_X])
 			{
@@ -493,7 +590,12 @@ namespace rythe::application
 						action.last_mods = translateModifierKeys(window_mouse_event.mods);
 						action.last_method = inputmap::method::MOUSE_LEFT;
 						if (!action.repeat)
-							action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, 0.0f);
+						{
+							action.callback(
+								this, action.last_state, action.last_mods, action.last_method, action.trigger_value,
+								0.0f
+							);
+						}
 					}
 					break;
 				}
@@ -505,7 +607,12 @@ namespace rythe::application
 						action.last_mods = translateModifierKeys(window_mouse_event.mods);
 						action.last_method = inputmap::method::MOUSE_MIDDLE;
 						if (!action.repeat)
-							action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, 0.0f);
+						{
+							action.callback(
+								this, action.last_state, action.last_mods, action.last_method, action.trigger_value,
+								0.0f
+							);
+						}
 					}
 					break;
 				}
@@ -517,7 +624,12 @@ namespace rythe::application
 						action.last_mods = translateModifierKeys(window_mouse_event.mods);
 						action.last_method = inputmap::method::MOUSE_RIGHT;
 						if (!action.repeat)
-							action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, 0.0f);
+						{
+							action.callback(
+								this, action.last_state, action.last_mods, action.last_method, action.trigger_value,
+								0.0f
+							);
+						}
 					}
 					break;
 				}

@@ -129,7 +129,9 @@ namespace rythe::application
 			: windowHandle(windowHandle)
 		{
 			for (int i = 0; i < count; i++)
+			{
 				paths.push_back(cpaths[i]);
+			}
 		}
 	};
 

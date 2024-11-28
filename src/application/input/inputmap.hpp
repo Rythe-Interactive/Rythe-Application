@@ -21,32 +21,17 @@ namespace rythe::application
 			MAX_SIZE = 16 + JOYSTICK0
 		};
 
-		static uint8_t value(modifier_keys m)
-		{
-			return static_cast<uint8_t>(m);
-		}
+		static uint8_t value(modifier_keys m) { return static_cast<uint8_t>(m); }
 
-		friend uint8_t operator-(modifier_keys lhs, modifier_keys rhs)
-		{
-			return value(lhs) - value(rhs);
-		}
+		friend uint8_t operator-(modifier_keys lhs, modifier_keys rhs) { return value(lhs) - value(rhs); }
 
-		friend uint8_t operator+(modifier_keys lhs, modifier_keys rhs)
-		{
-			return value(lhs) + value(rhs);
-		}
+		friend uint8_t operator+(modifier_keys lhs, modifier_keys rhs) { return value(lhs) + value(rhs); }
 		friend modifier_keys operator+(modifier_keys lhs, uint8_t rhs)
 		{
 			return static_cast<modifier_keys>(value(lhs) + rhs);
 		}
-		friend uint8_t operator&(modifier_keys lhs, modifier_keys rhs)
-		{
-			return value(lhs) & value(rhs);
-		}
-		friend uint8_t operator|(modifier_keys lhs, modifier_keys rhs)
-		{
-			return value(lhs) | value(rhs);
-		}
+		friend uint8_t operator&(modifier_keys lhs, modifier_keys rhs) { return value(lhs) & value(rhs); }
+		friend uint8_t operator|(modifier_keys lhs, modifier_keys rhs) { return value(lhs) | value(rhs); }
 
 		enum class method
 		{
@@ -219,53 +204,54 @@ namespace rythe::application
 		static constexpr bool is_axis(method m)
 		{
 			return m == method::MOUSE || m == method::JOY || m == method::SCROLL || m == method::GAMEPAD_LEFT_TRIGGER ||
-				   m == method::GAMEPAD_RIGHT_TRIGGER || m == method::GAMEPAD_LEFT_AXIS || m == method::GAMEPAD_RIGHT_AXIS ||
-				   m == method::GAMEPAD_LEFT_X || m == method::GAMEPAD_LEFT_Y || m == method::GAMEPAD_RIGHT_X ||
-				   m == method::GAMEPAD_RIGHT_Y || m == method::HSCROLL || m == method::VSCROLL ||
-				   m == method::MOUSE_X || m == method::MOUSE_Y;
+				   m == method::GAMEPAD_RIGHT_TRIGGER || m == method::GAMEPAD_LEFT_AXIS ||
+				   m == method::GAMEPAD_RIGHT_AXIS || m == method::GAMEPAD_LEFT_X || m == method::GAMEPAD_LEFT_Y ||
+				   m == method::GAMEPAD_RIGHT_X || m == method::GAMEPAD_RIGHT_Y || m == method::HSCROLL ||
+				   m == method::VSCROLL || m == method::MOUSE_X || m == method::MOUSE_Y;
 		}
 
 		static constexpr bool is_key(method m)
 		{
-			return m == method::KEY || m == method::CHAR || m == method::JOY || m == method::MOUSE || m == method::GAMEPAD_A ||
-				   m == method::GAMEPAD_B || m == method::GAMEPAD_X || m == method::GAMEPAD_Y ||
-				   m == method::GAMEPAD_LEFT_BUMPER || m == method::GAMEPAD_RIGHT_BUMPER || m == method::GAMEPAD_BACK ||
-				   m == method::GAMEPAD_START || m == method::GAMEPAD_GUIDE || m == method::GAMEPAD_DPAD_UP ||
-				   m == method::GAMEPAD_DPAD_RIGHT || m == method::GAMEPAD_DPAD_DOWN || m == method::GAMEPAD_DPAD_LEFT ||
-				   m == method::SPACE || m == method::APOSTROPHE || m == method::COMMA || m == method::MINUS ||
-				   m == method::PERIOD || m == method::SLASH || m == method::NUM0 || m == method::NUM1 ||
-				   m == method::NUM2 || m == method::NUM3 || m == method::NUM4 || m == method::NUM5 || m == method::NUM6 ||
-				   m == method::NUM7 || m == method::NUM8 || m == method::NUM9 || m == method::SEMICOLON ||
-				   m == method::EQUAL || m == method::A || m == method::B || m == method::C || m == method::D ||
-				   m == method::E || m == method::F || m == method::G || m == method::H || m == method::I || m == method::J ||
-				   m == method::K || m == method::L || m == method::M || m == method::N || m == method::O || m == method::P ||
-				   m == method::Q || m == method::R || m == method::S || m == method::T || m == method::U || m == method::V ||
-				   m == method::W || m == method::X || m == method::Y || m == method::Z || m == method::LEFT_BRACKET ||
-				   m == method::BACKSLASH || m == method::RIGHT_BRACKET || m == method::GRAVE_ACCENT || m == method::WORLD_1 ||
+			return m == method::KEY || m == method::CHAR || m == method::JOY || m == method::MOUSE ||
+				   m == method::GAMEPAD_A || m == method::GAMEPAD_B || m == method::GAMEPAD_X ||
+				   m == method::GAMEPAD_Y || m == method::GAMEPAD_LEFT_BUMPER || m == method::GAMEPAD_RIGHT_BUMPER ||
+				   m == method::GAMEPAD_BACK || m == method::GAMEPAD_START || m == method::GAMEPAD_GUIDE ||
+				   m == method::GAMEPAD_DPAD_UP || m == method::GAMEPAD_DPAD_RIGHT || m == method::GAMEPAD_DPAD_DOWN ||
+				   m == method::GAMEPAD_DPAD_LEFT || m == method::SPACE || m == method::APOSTROPHE ||
+				   m == method::COMMA || m == method::MINUS || m == method::PERIOD || m == method::SLASH ||
+				   m == method::NUM0 || m == method::NUM1 || m == method::NUM2 || m == method::NUM3 ||
+				   m == method::NUM4 || m == method::NUM5 || m == method::NUM6 || m == method::NUM7 ||
+				   m == method::NUM8 || m == method::NUM9 || m == method::SEMICOLON || m == method::EQUAL ||
+				   m == method::A || m == method::B || m == method::C || m == method::D || m == method::E ||
+				   m == method::F || m == method::G || m == method::H || m == method::I || m == method::J ||
+				   m == method::K || m == method::L || m == method::M || m == method::N || m == method::O ||
+				   m == method::P || m == method::Q || m == method::R || m == method::S || m == method::T ||
+				   m == method::U || m == method::V || m == method::W || m == method::X || m == method::Y ||
+				   m == method::Z || m == method::LEFT_BRACKET || m == method::BACKSLASH ||
+				   m == method::RIGHT_BRACKET || m == method::GRAVE_ACCENT || m == method::WORLD_1 ||
 				   m == method::WORLD_2 || m == method::ESCAPE || m == method::ENTER || m == method::TAB ||
 				   m == method::BACKSPACE || m == method::INSERT || m == method::DEL || m == method::RIGHT ||
 				   m == method::LEFT || m == method::DOWN || m == method::UP || m == method::PAGE_UP ||
 				   m == method::PAGE_DOWN || m == method::HOME || m == method::END || m == method::CAPS_LOCK ||
-				   m == method::SCROLL_LOCK || m == method::NUM_LOCK || m == method::PRINT_SCREEN || m == method::PAUSE ||
-				   m == method::F1 || m == method::F2 || m == method::F3 || m == method::F4 || m == method::F5 ||
-				   m == method::F6 || m == method::F7 || m == method::F8 || m == method::F9 || m == method::F10 ||
-				   m == method::F11 || m == method::F12 || m == method::F13 || m == method::F14 || m == method::F15 ||
-				   m == method::F16 || m == method::F17 || m == method::F18 || m == method::F19 || m == method::F20 ||
-				   m == method::F21 || m == method::F22 || m == method::F23 || m == method::F24 || m == method::F25 ||
-				   m == method::KP_0 || m == method::KP_1 || m == method::KP_2 || m == method::KP_3 || m == method::KP_4 ||
-				   m == method::KP_5 || m == method::KP_6 || m == method::KP_7 || m == method::KP_8 || m == method::KP_9 ||
-				   m == method::KP_DECIMAL || m == method::KP_DIVIDE || m == method::KP_MULTIPLY || m == method::KP_SUBTRACT ||
+				   m == method::SCROLL_LOCK || m == method::NUM_LOCK || m == method::PRINT_SCREEN ||
+				   m == method::PAUSE || m == method::F1 || m == method::F2 || m == method::F3 || m == method::F4 ||
+				   m == method::F5 || m == method::F6 || m == method::F7 || m == method::F8 || m == method::F9 ||
+				   m == method::F10 || m == method::F11 || m == method::F12 || m == method::F13 || m == method::F14 ||
+				   m == method::F15 || m == method::F16 || m == method::F17 || m == method::F18 || m == method::F19 ||
+				   m == method::F20 || m == method::F21 || m == method::F22 || m == method::F23 || m == method::F24 ||
+				   m == method::F25 || m == method::KP_0 || m == method::KP_1 || m == method::KP_2 ||
+				   m == method::KP_3 || m == method::KP_4 || m == method::KP_5 || m == method::KP_6 ||
+				   m == method::KP_7 || m == method::KP_8 || m == method::KP_9 || m == method::KP_DECIMAL ||
+				   m == method::KP_DIVIDE || m == method::KP_MULTIPLY || m == method::KP_SUBTRACT ||
 				   m == method::KP_ADD || m == method::KP_ENTER || m == method::KP_EQUAL || m == method::LEFT_SHIFT ||
-				   m == method::LEFT_CONTROL || m == method::LEFT_ALT || m == method::LEFT_SUPER || m == method::RIGHT_SHIFT ||
-				   m == method::RIGHT_CONTROL || m == method::RIGHT_ALT || m == method::RIGHT_SUPER || m == method::MENU ||
-				   m == method::MOUSE_LEFT || m == method::MOUSE_MIDDLE || m == method::MOUSE_RIGHT ||
-				   m == method::GAMEPAD_RIGHT_THUMB || m == method::GAMEPAD_LEFT_THUMB;
+				   m == method::LEFT_CONTROL || m == method::LEFT_ALT || m == method::LEFT_SUPER ||
+				   m == method::RIGHT_SHIFT || m == method::RIGHT_CONTROL || m == method::RIGHT_ALT ||
+				   m == method::RIGHT_SUPER || m == method::MENU || m == method::MOUSE_LEFT ||
+				   m == method::MOUSE_MIDDLE || m == method::MOUSE_RIGHT || m == method::GAMEPAD_RIGHT_THUMB ||
+				   m == method::GAMEPAD_LEFT_THUMB;
 		}
 
-		static constexpr bool has_keys_and_axis(method m)
-		{
-			return is_key(m) && is_axis(m);
-		}
+		static constexpr bool has_keys_and_axis(method m) { return is_key(m) && is_axis(m); }
 
 		static constexpr bool is_family(method m)
 		{
@@ -406,30 +392,43 @@ namespace rythe::application
 				case method::JOY:
 				{
 					return std::set<method>{
-						method::GAMEPAD_A, method::GAMEPAD_B, method::GAMEPAD_X, method::GAMEPAD_Y, method::GAMEPAD_LEFT_BUMPER,
-						method::GAMEPAD_RIGHT_BUMPER, method::GAMEPAD_BACK, method::GAMEPAD_START, method::GAMEPAD_GUIDE,
-						method::GAMEPAD_DPAD_UP, method::GAMEPAD_DPAD_RIGHT,
-						method::GAMEPAD_DPAD_DOWN, method::GAMEPAD_DPAD_LEFT, method::GAMEPAD_LEFT_X, method::GAMEPAD_LEFT_Y,
-						method::GAMEPAD_RIGHT_X, method::GAMEPAD_RIGHT_Y, method::GAMEPAD_LEFT_TRIGGER, method::GAMEPAD_RIGHT_TRIGGER,
-						method::GAMEPAD_RIGHT_THUMB, method::GAMEPAD_LEFT_THUMB
+						method::GAMEPAD_A,
+						method::GAMEPAD_B,
+						method::GAMEPAD_X,
+						method::GAMEPAD_Y,
+						method::GAMEPAD_LEFT_BUMPER,
+						method::GAMEPAD_RIGHT_BUMPER,
+						method::GAMEPAD_BACK,
+						method::GAMEPAD_START,
+						method::GAMEPAD_GUIDE,
+						method::GAMEPAD_DPAD_UP,
+						method::GAMEPAD_DPAD_RIGHT,
+						method::GAMEPAD_DPAD_DOWN,
+						method::GAMEPAD_DPAD_LEFT,
+						method::GAMEPAD_LEFT_X,
+						method::GAMEPAD_LEFT_Y,
+						method::GAMEPAD_RIGHT_X,
+						method::GAMEPAD_RIGHT_Y,
+						method::GAMEPAD_LEFT_TRIGGER,
+						method::GAMEPAD_RIGHT_TRIGGER,
+						method::GAMEPAD_RIGHT_THUMB,
+						method::GAMEPAD_LEFT_THUMB
 
 					};
 				}
 				case method::GAMEPAD_LEFT_AXIS:
 				{
-					return std::set<method>{
-						method::GAMEPAD_LEFT_X, method::GAMEPAD_LEFT_Y
-					};
+					return std::set<method>{method::GAMEPAD_LEFT_X, method::GAMEPAD_LEFT_Y};
 				}
 				case method::GAMEPAD_RIGHT_AXIS:
 				{
-					return std::set<method>{
-						method::GAMEPAD_RIGHT_X, method::GAMEPAD_RIGHT_Y
-					};
+					return std::set<method>{method::GAMEPAD_RIGHT_X, method::GAMEPAD_RIGHT_Y};
 				}
 				case method::MOUSE:
 				{
-					return std::set<method>{method::MOUSE_Y, method::MOUSE_X, method::MOUSE_LEFT, method::MOUSE_MIDDLE, method::MOUSE_RIGHT};
+					return std::set<method>{
+						method::MOUSE_Y, method::MOUSE_X, method::MOUSE_LEFT, method::MOUSE_MIDDLE, method::MOUSE_RIGHT
+					};
 				}
 
 				case method::SCROLL:

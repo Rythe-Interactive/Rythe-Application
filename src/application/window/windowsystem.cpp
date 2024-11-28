@@ -17,7 +17,9 @@ namespace rythe::application
 	void WindowSystem::closeWindow(GLFWwindow* window)
 	{
 		if (!ContextHelper::initialized())
+		{
 			return;
+		}
 
 		{
 			std::lock_guard guard(m_creationLock); // Lock all creation sensitive data.
@@ -27,16 +29,22 @@ namespace rythe::application
 			async::spinlock* lock = nullptr;
 			if (handle.valid())
 			{
-				raiseEvent<window_close>(m_windowComponents[window]); // Trigger any callbacks that want to know about any windows closing.
+				raiseEvent<window_close>(m_windowComponents[window]
+				); // Trigger any callbacks that want to know about any windows closing.
 
-				if (!ContextHelper::windowShouldClose(window))        // If a callback canceled the window destruction then we should cancel.
+				if (!ContextHelper::windowShouldClose(window
+					)) // If a callback canceled the window destruction then we should cancel.
+				{
 					return;
+				}
 
 				{
 					lock = handle->lock;
-					std::lock_guard guard(*lock);  // "deleting" the window is technically writing, so we copy the pointer and use that to lock it.
-					handle.get() = invalid_window; // We mark the window as deleted without deleting it yet. It can cause users to find invalid windows,
-												   // but at least they won't use a destroyed component after the lock unlocks.
+					std::lock_guard guard(*lock
+					); // "deleting" the window is technically writing, so we copy the pointer and use that to lock it.
+					handle.get() = invalid_window; // We mark the window as deleted without deleting it yet. It can
+												   // cause users to find invalid windows, but at least they won't use a
+												   // destroyed component after the lock unlocks.
 
 					handle.destroy();
 					m_windowComponents.erase(window);
@@ -44,20 +52,26 @@ namespace rythe::application
 
 				if (handle.owner == ecs::world)
 				{
-					raiseEvent<events::exit>(); // If the current window we're closing is the main window we want to close the application.
+					raiseEvent<events::exit>(
+					); // If the current window we're closing is the main window we want to close the application.
 				} // (we might want to leave this up to the user at some point.)
 
-				ContextHelper::destroyWindow(window); // After all traces of the window throughout the engine have been erased we actually close the window.
+				ContextHelper::destroyWindow(window); // After all traces of the window throughout the engine have been
+													  // erased we actually close the window.
 			}
 			if (lock)
+			{
 				delete lock;
+			}
 		}
 	}
 
 	void WindowSystem::onWindowMoved(GLFWwindow* window, int x, int y)
 	{
 		if (m_windowComponents.contains(window))
+		{
 			raiseEvent<window_move>(m_windowComponents[window], math::int2(x, y));
+		}
 	}
 
 	void WindowSystem::onWindowResize(GLFWwindow* win, int width, int height)
@@ -73,79 +87,108 @@ namespace rythe::application
 	void WindowSystem::onWindowRefresh(GLFWwindow* window)
 	{
 		if (m_windowComponents.contains(window))
+		{
 			raiseEvent<window_refresh>(m_windowComponents[window]);
+		}
 	}
 
 	void WindowSystem::onWindowFocus(GLFWwindow* window, int focused)
 	{
 		if (m_windowComponents.contains(window))
+		{
 			raiseEvent<window_focus>(m_windowComponents[window], focused);
+		}
 	}
 
 	void WindowSystem::onWindowIconify(GLFWwindow* window, int iconified)
 	{
 		if (m_windowComponents.contains(window))
+		{
 			raiseEvent<window_iconified>(m_windowComponents[window], iconified);
+		}
 	}
 
 	void WindowSystem::onWindowMaximize(GLFWwindow* window, int maximized)
 	{
 		if (m_windowComponents.contains(window))
+		{
 			raiseEvent<window_maximized>(m_windowComponents[window], maximized);
+		}
 	}
 
 	void WindowSystem::onWindowFrameBufferResize(GLFWwindow* window, int width, int height)
 	{
 		if (m_windowComponents.contains(window))
+		{
 			raiseEvent<window_framebuffer_resize>(m_windowComponents[window], math::int2(width, height));
+		}
 	}
 
 	void WindowSystem::onWindowContentRescale(GLFWwindow* window, float xscale, float yscale)
 	{
 		if (m_windowComponents.contains(window))
+		{
 			raiseEvent<window_content_rescale>(m_windowComponents[window], math::vec2(xscale, xscale));
+		}
 	}
 
 	void WindowSystem::onItemDroppedInWindow(GLFWwindow* window, int count, const char** paths)
 	{
 		if (m_windowComponents.contains(window))
+		{
 			raiseEvent<window_item_dropped>(m_windowComponents[window], count, paths);
+		}
 	}
 
 	void WindowSystem::onMouseEnterWindow(GLFWwindow* window, int entered)
 	{
 		if (m_windowComponents.contains(window))
+		{
 			raiseEvent<mouse_enter_window>(m_windowComponents[window], entered);
+		}
 	}
 
 	void WindowSystem::onKeyInput(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		if (m_windowComponents.contains(window))
+		{
 			raiseEvent<key_input>(m_windowComponents[window], key, scancode, action, mods);
+		}
 	}
 
 	void WindowSystem::onCharInput(GLFWwindow* window, rsl::uint codepoint)
 	{
 		if (m_windowComponents.contains(window))
+		{
 			raiseEvent<char_input>(m_windowComponents[window], codepoint);
+		}
 	}
 
 	void WindowSystem::onMouseMoved(GLFWwindow* window, double xpos, double ypos)
 	{
 		if (m_windowComponents.contains(window))
-			raiseEvent<mouse_moved>(m_windowComponents[window], math::double2(xpos, ypos) / (math::dvec2)ContextHelper::getFramebufferSize(window));
+		{
+			raiseEvent<mouse_moved>(
+				m_windowComponents[window],
+				math::double2(xpos, ypos) / (math::dvec2)ContextHelper::getFramebufferSize(window)
+			);
+		}
 	}
 
 	void WindowSystem::onMouseButton(GLFWwindow* window, int button, int action, int mods)
 	{
 		if (m_windowComponents.contains(window))
+		{
 			raiseEvent<mouse_button>(m_windowComponents[window], button, action, mods);
+		}
 	}
 
 	void WindowSystem::onMouseScroll(GLFWwindow* window, double xoffset, double yoffset)
 	{
 		if (m_windowComponents.contains(window))
+		{
 			raiseEvent<mouse_scrolled>(m_windowComponents[window], math::double2(xoffset, yoffset));
+		}
 	}
 
 	void WindowSystem::onExit(events::exit& event)
@@ -165,17 +208,22 @@ namespace rythe::application
 
 				{
 					lock = win.lock;
-					std::lock_guard guard(*lock); // "deleting" the window is technically writing, so we copy the pointer and use that to lock it.
-					win = invalid_window;         // We mark the window as deleted without deleting it yet. It can cause users to find invalid windows,
-												  // but at least they won't use a destroyed component after the lock unlocks.
+					std::lock_guard guard(*lock
+					); // "deleting" the window is technically writing, so we copy the pointer and use that to lock it.
+					win = invalid_window; // We mark the window as deleted without deleting it yet. It can cause users
+										  // to find invalid windows, but at least they won't use a destroyed component
+										  // after the lock unlocks.
 					handle.destroy();
 					m_windowComponents.erase(win);
 				}
 
-				ContextHelper::destroyWindow(win); // After all traces of the window throughout the engine have been erased we actually close the window.
+				ContextHelper::destroyWindow(win); // After all traces of the window throughout the engine have been
+												   // erased we actually close the window.
 			}
 			if (lock)
+			{
 				delete lock;
+			}
 		}
 
 		m_exit = true;
@@ -195,7 +243,9 @@ namespace rythe::application
 			m_iconRequests.emplace_back(entityId, icon);
 		}
 		else
+		{
 			log::warn("Icon change denied, invalid entity given.");
+		}
 	}
 
 	void WindowSystem::requestIconChange(rsl::id_type entityId, const std::string& iconName)
@@ -206,7 +256,9 @@ namespace rythe::application
 			m_iconRequests.emplace_back(entityId, iconName);
 		}
 		else
+		{
 			log::warn("Icon change denied, invalid entity given.");
+		}
 	}
 
 	void WindowSystem::requestFullscreenToggle(rsl::id_type entityId, math::int2 position, math::int2 size)
@@ -217,10 +269,15 @@ namespace rythe::application
 			m_fullscreenRequests.emplace_back(entityId, position, size);
 		}
 		else
+		{
 			log::warn("Fullscreen toggle denied, invalid entity given.");
+		}
 	}
 
-	void WindowSystem::requestWindow(rsl::id_type entityId, math::int2 size, const std::string& name, assets::asset<image> icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints)
+	void WindowSystem::requestWindow(
+		rsl::id_type entityId, math::int2 size, const std::string& name, assets::asset<image> icon,
+		GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints
+	)
 	{
 		if (entityId)
 		{
@@ -228,10 +285,15 @@ namespace rythe::application
 			m_creationRequests.emplace_back(entityId, size, name, icon, monitor, share, swapInterval, hints);
 		}
 		else
+		{
 			log::warn("Window creation denied, invalid entity given.");
+		}
 	}
 
-	void WindowSystem::requestWindow(rsl::id_type entityId, math::int2 size, const std::string& name, assets::asset<image> icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval)
+	void WindowSystem::requestWindow(
+		rsl::id_type entityId, math::int2 size, const std::string& name, assets::asset<image> icon,
+		GLFWmonitor* monitor, GLFWwindow* share, int swapInterval
+	)
 	{
 		if (entityId)
 		{
@@ -239,10 +301,15 @@ namespace rythe::application
 			m_creationRequests.emplace_back(entityId, size, name, icon, monitor, share, swapInterval);
 		}
 		else
+		{
 			log::warn("Window creation denied, invalid entity given.");
+		}
 	}
 
-	void WindowSystem::requestWindow(rsl::id_type entityId, math::int2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints)
+	void WindowSystem::requestWindow(
+		rsl::id_type entityId, math::int2 size, const std::string& name, const std::string& iconName,
+		GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints
+	)
 	{
 		if (entityId)
 		{
@@ -250,10 +317,15 @@ namespace rythe::application
 			m_creationRequests.emplace_back(entityId, size, name, iconName, monitor, share, swapInterval);
 		}
 		else
+		{
 			log::warn("Window creation denied, invalid entity given.");
+		}
 	}
 
-	void WindowSystem::requestWindow(rsl::id_type entityId, math::int2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval)
+	void WindowSystem::requestWindow(
+		rsl::id_type entityId, math::int2 size, const std::string& name, const std::string& iconName,
+		GLFWmonitor* monitor, GLFWwindow* share, int swapInterval
+	)
 	{
 		if (entityId)
 		{
@@ -261,7 +333,9 @@ namespace rythe::application
 			m_creationRequests.emplace_back(entityId, size, name, iconName, monitor, share, swapInterval);
 		}
 		else
+		{
 			log::warn("Window creation denied, invalid entity given.");
+		}
 	}
 
 	void WindowSystem::setup()
@@ -269,20 +343,31 @@ namespace rythe::application
 		using namespace filesystem::literals;
 
 		m_exit = false;
-		m_defaultIcon = assets::load<image>("RYTHE Icon", "engine://resources/rythe/icon.png"_view, assets::import_settings<image>{true, true, false});
+		m_defaultIcon = assets::load<image>(
+			"RYTHE Icon", "engine://resources/rythe/icon.png"_view, assets::import_settings<image>{true, true, false}
+		);
 
 		bindToEvent<events::exit, &WindowSystem::onExit>();
 
-		if (m_creationRequests.empty() || (std::find_if(m_creationRequests.begin(), m_creationRequests.end(), [](window_request& r)
-		{ return r.entityId == ecs::world_entity_id; }) == m_creationRequests.end()))
-			requestWindow(ecs::world, math::int2(1360, 768), "RYTHE Engine", assets::invalid_asset<image>, nullptr, nullptr, 1); // Create the request for the main window.
+		if (m_creationRequests.empty() || (std::find_if(
+											   m_creationRequests.begin(), m_creationRequests.end(),
+											   [](window_request& r) { return r.entityId == ecs::world_entity_id; }
+										   ) == m_creationRequests.end()))
+		{
+			requestWindow(
+				ecs::world, math::int2(1360, 768), "RYTHE Engine", assets::invalid_asset<image>, nullptr, nullptr, 1
+			); // Create the request for the main window.
+		}
 
-		if (!ContextHelper::initialized())                                                                                       // Initialize context.
+		if (!ContextHelper::initialized()) // Initialize context.
+		{
 			if (!ContextHelper::init())
 			{
 				exit();
-				return; // If we can't initialize we can't create any windows, not creating the main window means the engine should shut down.
+				return; // If we can't initialize we can't create any windows, not creating the main window means the
+						// engine should shut down.
 			}
+		}
 		log::trace("Creating main window.");
 		createWindows();
 		showMainWindow();
@@ -294,7 +379,9 @@ namespace rythe::application
 	void WindowSystem::createWindows()
 	{
 		if (m_exit) // If the engine is exiting then we can't create new windows.
+		{
 			return;
+		}
 
 		std::lock_guard guard(m_creationRequestLock);
 		for (auto& request : m_creationRequests)
@@ -310,7 +397,9 @@ namespace rythe::application
 			if (request.hints.size())
 			{
 				for (auto& [hint, value] : request.hints)
+				{
 					ContextHelper::windowHint(hint, value);
+				}
 			}
 			else // Default window hints.
 			{
@@ -322,7 +411,9 @@ namespace rythe::application
 				GLFWmonitor* monitor = request.monitor;
 
 				if (!request.monitor)
+				{
 					monitor = ContextHelper::getPrimaryMonitor();
+				}
 
 				const GLFWvidmode* mode = ContextHelper::getVideoMode(monitor);
 
@@ -333,18 +424,25 @@ namespace rythe::application
 			}
 
 			if (request.size == math::int2(0, 0))
+			{
 				request.size = {400, 400};
+			}
 
 			if (request.name.empty())
+			{
 				request.name = "RYTHE Engine";
+			}
 
 			assets::asset<image> icon = request.icon;
 			if (icon == assets::invalid_asset<image>)
+			{
 				icon = m_defaultIcon;
+			}
 
 			ContextHelper::windowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 
-			window win = ContextHelper::createWindow(request.size, request.name.c_str(), request.monitor, request.share);
+			window win =
+				ContextHelper::createWindow(request.size, request.name.c_str(), request.monitor, request.share);
 
 			if (icon->components() == image_components::rgba && icon->format() == channel_format::eight_bit)
 			{
@@ -387,8 +485,10 @@ namespace rythe::application
 			{
 				win.lock = new async::spinlock();
 
-				std::lock_guard wguard(*win.lock);      // This is the only code that has access to win.lock right now, so there's no deadlock risk.
-				std::lock_guard cguard(m_creationLock); // Locking them both separately is faster than using a multilock.
+				std::lock_guard wguard(*win.lock
+				); // This is the only code that has access to win.lock right now, so there's no deadlock risk.
+				std::lock_guard cguard(m_creationLock
+				); // Locking them both separately is faster than using a multilock.
 				m_windowComponents.insert(win, handle);
 				handle = ent.add_component<window>(win);
 
@@ -425,7 +525,9 @@ namespace rythe::application
 	void WindowSystem::fullscreenWindows()
 	{
 		if (m_exit) // If the engine is exiting then we can't change any windows.
+		{
 			return;
+		}
 
 		std::lock_guard guard(m_fullscreenRequestLock);
 		for (auto& request : m_fullscreenRequests)
@@ -461,7 +563,9 @@ namespace rythe::application
 				GLFWmonitor* monitor = ContextHelper::getCurrentMonitor(win);
 				const GLFWvidmode* mode = ContextHelper::getVideoMode(monitor);
 
-				ContextHelper::setWindowMonitor(win, monitor, {0, 0}, math::int2(mode->width, mode->height), mode->refreshRate);
+				ContextHelper::setWindowMonitor(
+					win, monitor, {0, 0}, math::int2(mode->width, mode->height), mode->refreshRate
+				);
 				win.m_size = math::int2(mode->width, mode->height);
 				ContextHelper::makeContextCurrent(win);
 				ContextHelper::swapInterval(win.m_swapInterval);
@@ -477,7 +581,9 @@ namespace rythe::application
 	void WindowSystem::updateWindowIcons()
 	{
 		if (m_exit) // If the engine is exiting then we can't change any windows.
+		{
 			return;
+		}
 
 		std::lock_guard guard(m_iconRequestLock);
 		for (auto& request : m_iconRequests)
@@ -497,9 +603,14 @@ namespace rythe::application
 				continue;
 			}
 
-			if (request.icon->components() != image_components::rgba || request.icon->format() != channel_format::eight_bit)
+			if (request.icon->components() != image_components::rgba ||
+				request.icon->format() != channel_format::eight_bit)
 			{
-				log::warn("Icon change denied, image {} has the wrong format. The needed format is 4 channels with 8 bits per channel.", request.icon.name());
+				log::warn(
+					"Icon change denied, image {} has the wrong format. The needed format is 4 channels with 8 bits "
+					"per channel.",
+					request.icon.name()
+				);
 				continue;
 			}
 
@@ -513,7 +624,9 @@ namespace rythe::application
 	void WindowSystem::refreshWindows(rsl::time_span<rsl::fast_time> deltaTime)
 	{
 		if (!ContextHelper::initialized())
+		{
 			return;
+		}
 
 		std::lock_guard guard(m_creationLock);
 		static ecs::filter<window> windowFilter;
@@ -523,7 +636,9 @@ namespace rythe::application
 			{
 				context_guard guard(win);
 				if (!guard.contextIsValid())
+				{
 					continue;
+				}
 				ContextHelper::swapBuffers(win);
 			}
 		}
@@ -536,7 +651,9 @@ namespace rythe::application
 		fullscreenWindows();
 
 		if (!ContextHelper::initialized())
+		{
 			return;
+		}
 
 		ContextHelper::pollEvents();
 		ContextHelper::updateWindowFocus();
