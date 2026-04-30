@@ -316,7 +316,7 @@ namespace rythe::application
 			}
 		}
 
-		void onUpdate(rsl::time_span<rsl::fast_time> deltaTime)
+		void onUpdate(rsl::time_span deltaTime)
 		{
 			onJoystick(deltaTime);
 

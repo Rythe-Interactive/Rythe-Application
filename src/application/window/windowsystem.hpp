@@ -216,8 +216,8 @@ namespace rythe::application
 
 		void updateWindowIcons();
 
-		void refreshWindows(rsl::time_span<rsl::fast_time> deltaTime);
+		void refreshWindows(rsl::time_span deltaTime);
 
-		void handleWindowEvents(rsl::time_span<rsl::fast_time> deltaTime);
+		void handleWindowEvents(rsl::time_span deltaTime);
 	};
 } // namespace rythe::application

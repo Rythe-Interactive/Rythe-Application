@@ -621,7 +621,7 @@ namespace rythe::application
 		m_iconRequests.clear();
 	}
 
-	void WindowSystem::refreshWindows(rsl::time_span<rsl::fast_time> deltaTime)
+	void WindowSystem::refreshWindows(rsl::time_span deltaTime)
 	{
 		if (!ContextHelper::initialized())
 		{
@@ -644,7 +644,7 @@ namespace rythe::application
 		}
 	}
 
-	void WindowSystem::handleWindowEvents(rsl::time_span<rsl::fast_time> deltaTime)
+	void WindowSystem::handleWindowEvents(rsl::time_span deltaTime)
 	{
 		createWindows();
 		updateWindowIcons();
